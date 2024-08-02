@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"runtime"
 	"time"
@@ -92,7 +91,6 @@ func getStatus(ctx *fasthttp.RequestCtx) {
 		d, err := json.Marshal(statusData)
 		if err != nil {
 			log.Error().Err(err).Msg("Generating HTTP client response")
-			fmt.Printf("%+v \n", statusData)
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 			ctx.WriteString(fasthttp.StatusMessage(fasthttp.StatusInternalServerError))
 			return
