@@ -1,0 +1,9 @@
+{{- range $key, $value := .StatusData }}
+------------------------------------------
+Name: {{ $key }}
+Type: {{ $value.Type }}
+Is Alive: {{ $value.IsAlive }}
+Latency: {{ $value.Latency }}
+Error: {{ if (eq $value.Error nil) }}-{{ else }}{{ $value.Error }}{{ end }}
+{{- end }}
+------------------------------------------

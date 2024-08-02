@@ -1,0 +1,38 @@
+name: health-checker completion
+synopsis: Generate the autocompletion script for the specified shell
+description: |
+    Generate the autocompletion script for health-checker for the specified shell.
+    See each sub-command's help for details on how to use the generated script.
+options:
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for completion
+inherited_options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker - Health check your dependencies with ease
+    - health-checker completion bash - Generate the autocompletion script for bash
+    - health-checker completion fish - Generate the autocompletion script for fish
+    - health-checker completion powershell - Generate the autocompletion script for powershell
+    - health-checker completion zsh - Generate the autocompletion script for zsh

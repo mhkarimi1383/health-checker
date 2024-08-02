@@ -1,0 +1,43 @@
+name: health-checker serve
+synopsis: Acts as http server
+description: |-
+    Will expose health checks
+
+    Accepts HEAD method if status is only needed
+    Also expose an API and HTML view of your health check
+
+    Could be used as a sidecar container/process to handle them
+usage: health-checker serve [flags]
+options:
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for serve
+    - name: listen-address
+      shorthand: l
+      default_value: 127.0.0.1:2200
+      usage: Help message for toggle
+inherited_options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker - Health check your dependencies with ease

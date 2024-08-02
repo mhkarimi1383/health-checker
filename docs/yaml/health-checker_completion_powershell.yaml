@@ -1,0 +1,44 @@
+name: health-checker completion powershell
+synopsis: Generate the autocompletion script for powershell
+description: |
+    Generate the autocompletion script for powershell.
+
+    To load completions in your current shell session:
+
+    	health-checker completion powershell | Out-String | Invoke-Expression
+
+    To load completions for every new session, add the output of the above command
+    to your powershell profile.
+usage: health-checker completion powershell [flags]
+options:
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for powershell
+    - name: no-descriptions
+      default_value: "false"
+      usage: disable completion descriptions
+inherited_options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker completion - Generate the autocompletion script for the specified shell

@@ -1,0 +1,35 @@
+name: health-checker
+synopsis: Health check your dependencies with ease
+description: |
+    Could be run in http server mode (e.g. K8s Sidecar) or check and exit mode (e.g. Init Container/Job)
+options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for health-checker
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker completion - Generate the autocompletion script for the specified shell
+    - health-checker docGen - Generate Cli docs
+    - health-checker serve - Acts as http server
+    - health-checker simple - Just do a health check and exit or wait to service to become available

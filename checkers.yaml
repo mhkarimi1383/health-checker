@@ -1,0 +1,27 @@
+SSH Port Check:
+  type: port
+  timeout: 500ms
+  enabled: true
+  params:
+    host: 127.0.0.1
+    port: 22
+Production Database:
+  type: postgresql
+  timeout: 500ms
+  enabled: true
+  params:
+    url: postgres://postgres:postgres@localhost:5432/postgres
+Production Redis:
+  type: redis
+  timeout: 1ms
+  enabled: true
+  params:
+    url: redis://@localhost:6379/1
+Google:
+  type: http
+  timeout: 2s
+  enabled: true
+  params:
+    url: https://google.com
+    headers:
+      User-Agent: "Test"

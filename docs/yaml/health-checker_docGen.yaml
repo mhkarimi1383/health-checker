@@ -1,0 +1,33 @@
+name: health-checker docGen
+synopsis: Generate Cli docs
+description: Generates Cli docs in docs/ directory
+usage: health-checker docGen [flags]
+options:
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for docGen
+inherited_options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker - Health check your dependencies with ease

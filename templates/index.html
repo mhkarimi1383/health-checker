@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{{ .Title }}</title>
+  </head>
+  <body>
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3
+        class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight"
+      >
+        {{ .Title }}
+      </h3>
+    </div>
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-5 h-5 text-{{ if .OverallStatus }}green{{ else }}red{{ end }}-500"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            {{ if .OverallStatus }}<path d="m9 12 2 2 4-4"></path>{{ else }}<path d="m15 9-6 6"></path><path d="m9 9 6 6"></path>{{ end }}
+          </svg>
+          <span class="font-medium">Overall Status: {{ if .OverallStatus }}Online{{ else }}Offline{{ end }}</span>
+        </div>
+      </div>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&amp;_tr]:border-b">
+            <tr
+              class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+            >
+              <th
+                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0"
+              >
+                Service
+              </th>
+              <th
+                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0"
+              >
+                Type
+              </th>
+              <th
+                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0"
+              >
+                Latency
+              </th>
+              <th
+                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0"
+              >
+                Is Alive
+              </th>
+              <th
+                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0"
+              >
+                Error
+              </th>
+            </tr>
+          </thead>
+          <tbody class="[&amp;_tr:last-child]:border-0">
+            {{ range $key, $value := .StatusData }}
+            <tr
+              class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+            >
+              <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                <div class="font-medium">{{ $key }}</div>
+              </td>
+              <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                <div class="font-medium">{{ $value.Type }}</div>
+              </td>
+              <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                <div class="text-muted-foreground">{{ $value.Latency }}</div>
+              </td>
+              <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                <div
+                  class="inline-flex w-fit items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                >
+                  {{ if $value.IsAlive }}Online{{ else }}Offline{{ end }}
+                </div>
+              </td>
+              <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+                <div class="text-muted-foreground">{{ if (eq $value.Error nil) }} - {{ else }}{{ $value.Error }}{{ end }}</div>
+              </td>
+            </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,56 @@
+name: health-checker completion bash
+synopsis: Generate the autocompletion script for bash
+description: |
+    Generate the autocompletion script for the bash shell.
+
+    This script depends on the 'bash-completion' package.
+    If it is not installed already, you can install it via your OS's package manager.
+
+    To load completions in your current shell session:
+
+    	source <(health-checker completion bash)
+
+    To load completions for every new session, execute once:
+
+    #### Linux:
+
+    	health-checker completion bash > /etc/bash_completion.d/health-checker
+
+    #### macOS:
+
+    	health-checker completion bash > $(brew --prefix)/etc/bash_completion.d/health-checker
+
+    You will need to start a new shell for this setup to take effect.
+usage: health-checker completion bash
+options:
+    - name: help
+      shorthand: h
+      default_value: "false"
+      usage: help for bash
+    - name: no-descriptions
+      default_value: "false"
+      usage: disable completion descriptions
+inherited_options:
+    - name: checkers
+      shorthand: c
+      default_value: checkers.yaml
+      usage: |
+        Configuration file (Accepting JSON, TOML, YAML, HCL, INI, envfile or Java properties formats)
+    - name: debug
+      shorthand: d
+      default_value: "false"
+      usage: Enable Debug mode
+    - name: interval
+      shorthand: i
+      default_value: 2s
+      usage: Interval between each check
+    - name: json-log
+      shorthand: j
+      default_value: "false"
+      usage: Enable logging in json format
+    - name: trace
+      shorthand: t
+      default_value: "false"
+      usage: Enable Trace mode (Also enables debug mode)
+see_also:
+    - health-checker completion - Generate the autocompletion script for the specified shell
