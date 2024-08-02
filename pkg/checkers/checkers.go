@@ -71,17 +71,17 @@ func ConfigsToCheckers(configs CheckConfigs) (Checkers, error) {
 			}
 			checkers[hName] = h
 		case POSTGRESQL:
-			h := &PGCheck{}
-			if err := h.SetConfig(c); err != nil {
+			pg := &PGCheck{}
+			if err := pg.SetConfig(c); err != nil {
 				return checkers, err
 			}
-			checkers[hName] = h
+			checkers[hName] = pg
 		case REDIS:
-			h := &RedisCheck{}
-			if err := h.SetConfig(c); err != nil {
+			r := &RedisCheck{}
+			if err := r.SetConfig(c); err != nil {
 				return checkers, err
 			}
-			checkers[hName] = h
+			checkers[hName] = r
 		default:
 			log.Warn().Msgf("Invalid check type %v, Ignoring...", c.Type)
 			continue
