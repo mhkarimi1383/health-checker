@@ -41,9 +41,10 @@ func (r *RedisCheck) Check() Status {
 	defer cancel()
 	opts, err := redis.ParseURL(r.params.url)
 	if err != nil {
+		e := err.Error()
 		return Status{
 			IsAlive: false,
-			Error:   err,
+			Error:   &e,
 			Latency: 0,
 			Type:    REDIS,
 		}
@@ -57,9 +58,10 @@ func (r *RedisCheck) Check() Status {
 	defer c.Close()
 	s := c.Ping(ctx)
 	if s.Err() != nil {
+		e := s.Err().Error()
 		return Status{
 			IsAlive: false,
-			Error:   s.Err(),
+			Error:   &e,
 			Latency: time.Since(t),
 			Type:    REDIS,
 		}
@@ -67,7 +69,7 @@ func (r *RedisCheck) Check() Status {
 	s.Result()
 	return Status{
 		IsAlive: true,
-		Error:   s.Err(),
+		Error:   nil,
 		Latency: time.Since(t),
 		Type:    REDIS,
 	}

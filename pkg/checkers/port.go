@@ -1,7 +1,6 @@
 package checkers
 
 import (
-	"fmt"
 	"net"
 	"strconv"
 	"time"
@@ -42,9 +41,10 @@ func (p *PortCheck) Check() Status {
 	t := time.Now()
 	c, err := net.DialTimeout("tcp", net.JoinHostPort(p.params.host, strconv.Itoa(p.params.port)), p.config.Timeout)
 	if err != nil {
+		e := err.Error()
 		return Status{
 			IsAlive: false,
-			Error:   err,
+			Error:   &e,
 			Latency: time.Since(t),
 			Type:    PORT,
 		}
@@ -58,9 +58,10 @@ func (p *PortCheck) Check() Status {
 			Type:    PORT,
 		}
 	}
+	e := "not connected"
 	return Status{
 		IsAlive: false,
-		Error:   fmt.Errorf("not connected"),
+		Error:   &e,
 		Latency: time.Since(t),
 		Type:    PORT,
 	}

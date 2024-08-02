@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"runtime"
 	"time"
@@ -43,7 +44,7 @@ func Start(listenAddress string, interval time.Duration, chs checkers.Checkers) 
 				status := checkers.RunChecks(chs)
 				success = true
 				for name, s := range status {
-					log.Info().Dur("latency", s.Latency).Bool("isAlive", s.IsAlive).Err(s.Error).Str("name", name).Str("type", s.Type).Msg("Health Check status")
+					log.Info().Dur("latency", s.Latency).Bool("isAlive", s.IsAlive).Any("error", s.Error).Str("name", name).Str("type", s.Type).Msg("Health Check status")
 					if !s.IsAlive {
 						success = false
 					}
@@ -91,6 +92,7 @@ func getStatus(ctx *fasthttp.RequestCtx) {
 		d, err := json.Marshal(statusData)
 		if err != nil {
 			log.Error().Err(err).Msg("Generating HTTP client response")
+			fmt.Printf("%+v \n", statusData)
 			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 			ctx.WriteString(fasthttp.StatusMessage(fasthttp.StatusInternalServerError))
 			return

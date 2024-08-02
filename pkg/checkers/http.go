@@ -54,9 +54,10 @@ func (h *HTTPCheck) Check() Status {
 	t := time.Now()
 	err := fasthttp.Do(req, resp)
 	if err != nil {
+		e := err.Error()
 		return Status{
 			IsAlive: false,
-			Error:   err,
+			Error:   &e,
 			Latency: time.Since(t),
 			Type:    HTTP,
 		}
@@ -69,9 +70,10 @@ func (h *HTTPCheck) Check() Status {
 			Error:   nil,
 		}
 	}
+	e := "not connected"
 	return Status{
 		IsAlive: false,
-		Error:   fmt.Errorf("not connected"),
+		Error:   &e,
 		Latency: time.Since(t),
 		Type:    HTTP,
 	}

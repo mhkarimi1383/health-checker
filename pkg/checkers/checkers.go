@@ -18,7 +18,7 @@ const (
 
 type Status struct {
 	Latency time.Duration
-	Error   error
+	Error   *string
 	Type    string
 	IsAlive bool
 }

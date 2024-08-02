@@ -39,7 +39,7 @@ also with correct exit code based on status`,
 			status := checkers.RunChecks(chs)
 			success = true
 			for name, s := range status {
-				log.Info().Dur("latency", s.Latency).Bool("isAlive", s.IsAlive).Err(s.Error).Str("name", name).Str("type", s.Type).Msg("Health Check status")
+				log.Info().Dur("latency", s.Latency).Bool("isAlive", s.IsAlive).Any("error", s.Error).Str("name", name).Str("type", s.Type).Msg("Health Check status")
 				if !s.IsAlive {
 					success = false
 				}
