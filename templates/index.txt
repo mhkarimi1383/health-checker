@@ -1,3 +1,6 @@
+{{/*
+vi: ft=gotmpl
+*/}}
 {{- range $key, $value := .StatusData }}
 ------------------------------------------
 Name: {{ $key }}

@@ -12,6 +12,10 @@ import (
 	"github.com/mhkarimi1383/health-checker/pkg/checkers"
 	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
+
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/html"
+	mjson "github.com/tdewolff/minify/v2/json"
 )
 
 var (
@@ -19,12 +23,33 @@ var (
 	statusData   checkers.Statuses
 	htmlTemplate = template.Must(template.ParseFiles("templates/index.html"))
 	textTemplate = template.Must(template.ParseFiles("templates/index.txt"))
+	minifier     = minify.New()
 )
+
+func init() {
+	minifier.AddFunc("text/html", html.Minify)
+	minifier.AddFunc("application/json", mjson.Minify)
+}
 
 type pageData struct {
 	StatusData    checkers.Statuses
 	Title         string
 	OverallStatus bool
+}
+
+func minifyResponse(h fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return func(ctx *fasthttp.RequestCtx) {
+		h(ctx)
+		if ctx.QueryArgs().Peek("pretty") != nil {
+			return
+		}
+		minified, err := minifier.Bytes(string(ctx.Response.Header.Peek("Content-Type")), ctx.Response.Body())
+		if err != nil {
+			log.Warn().Err(err).Msg("Minifing HTTP client response")
+			return
+		}
+		ctx.Response.SetBody(minified)
+	}
 }
 
 func Start(listenAddress string, interval time.Duration, chs checkers.Checkers) error {
@@ -72,7 +97,7 @@ func Start(listenAddress string, interval time.Duration, chs checkers.Checkers) 
 		Logger:      &log.Logger,
 		Concurrency: runtime.GOMAXPROCS(0),
 	}
-	r.GET("/status", getStatus)
+	r.GET("/status", minifyResponse(getStatus))
 	r.HEAD("/status", headStatus)
 	return s.ListenAndServe(listenAddress)
 }
@@ -80,39 +105,44 @@ func Start(listenAddress string, interval time.Duration, chs checkers.Checkers) 
 func headStatus(ctx *fasthttp.RequestCtx) {
 	if !success {
 		ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+		return
 	}
+	ctx.SetStatusCode(fasthttp.StatusNoContent)
+}
+
+func returnHTTPError(ctx *fasthttp.RequestCtx, err error) {
+	log.Error().Err(err).Msg("Generating HTTP client response")
+	ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+	ctx.WriteString(fasthttp.StatusMessage(fasthttp.StatusInternalServerError))
 }
 
 func getStatus(ctx *fasthttp.RequestCtx) {
 	accept := ctx.Request.Header.Peek(fasthttp.HeaderAccept)
 	cType := getType(string(accept))
+	data := pageData{
+		StatusData:    statusData,
+		Title:         "Health Checker",
+		OverallStatus: success,
+	}
 	switch cType {
 	case applicationJSONContentType:
-		d, err := json.Marshal(statusData)
+		d, err := json.Marshal(data.StatusData)
 		if err != nil {
-			log.Error().Err(err).Msg("Generating HTTP client response")
-			ctx.SetStatusCode(fasthttp.StatusInternalServerError)
-			ctx.WriteString(fasthttp.StatusMessage(fasthttp.StatusInternalServerError))
+			returnHTTPError(ctx, err)
 			return
 		}
 		ctx.Write(d)
 	case textHtmlContentType:
-		err := htmlTemplate.Execute(ctx, pageData{
-			StatusData:    statusData,
-			Title:         "Health Checker",
-			OverallStatus: success,
-		})
+		err := htmlTemplate.Execute(ctx, data)
 		if err != nil {
-			log.Error().Err(err).Msg("Generating HTTP client response")
+			returnHTTPError(ctx, err)
+			return
 		}
 	case textPlainContentType:
-		err := textTemplate.Execute(ctx, pageData{
-			StatusData:    statusData,
-			Title:         "Health Checker",
-			OverallStatus: success,
-		})
+		err := textTemplate.Execute(ctx, data)
 		if err != nil {
-			log.Error().Err(err).Msg("Generating HTTP client response")
+			returnHTTPError(ctx, err)
+			return
 		}
 	default:
 		ctx.SetStatusCode(fasthttp.StatusNotAcceptable)
