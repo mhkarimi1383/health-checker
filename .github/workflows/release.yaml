@@ -14,7 +14,6 @@ jobs:
       matrix:
         goos:
           - linux
-          - darwin
           - freebsd
           - windows
         goarch:
@@ -25,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: wangyoucao577/go-release-action@v1
-      name: Build ${{ matrix.goos }}/${{ matrix.goos }}
+      name: Build ${{ matrix.goos }}/${{ matrix.goarch }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
