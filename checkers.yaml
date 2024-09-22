@@ -16,7 +16,7 @@ Production Redis:
   timeout: 1ms
   enabled: true
   params:
-    url: redis://@localhost:6379/1
+    url: redis://@127.0.0.1:6379/1
 Google:
   type: http
   timeout: 2s
