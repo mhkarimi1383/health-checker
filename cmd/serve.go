@@ -46,5 +46,5 @@ var (
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-	serveCmd.Flags().StringVarP(&listenAddress, "listen-address", "l", "127.0.0.1:2200", "Help message for toggle")
+	serveCmd.Flags().StringVarP(&listenAddress, "listen-address", "l", "127.0.0.1:2200", "Listen address for HTTP server")
 }

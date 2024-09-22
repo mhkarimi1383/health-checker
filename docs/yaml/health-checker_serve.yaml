@@ -16,7 +16,7 @@ options:
     - name: listen-address
       shorthand: l
       default_value: 127.0.0.1:2200
-      usage: Help message for toggle
+      usage: Listen address for HTTP server
 inherited_options:
     - name: checkers
       shorthand: c
