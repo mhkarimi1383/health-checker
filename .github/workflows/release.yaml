@@ -7,13 +7,26 @@ permissions:
     packages: write
 
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
+  binary-builds:
+    name: Build Banaries
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos:
+          - linux
+          - darwin
+          - freebsd
+          - windows
+        goarch:
+          - amd64
+          - arm
+          - arm64
+          - "386"
     steps:
     - uses: actions/checkout@v4
     - uses: wangyoucao577/go-release-action@v1
+      name: Build ${{ matrix.goos }}/${{ matrix.goos }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        goos: linux
-        goarch: amd64
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
