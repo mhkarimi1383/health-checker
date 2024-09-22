@@ -16,6 +16,10 @@ jobs:
       id: builder
       with:
         mode: "COMMIT"
+        configurationJson: |
+          {
+            "template": "\n#{{UNCATEGORIZED}}\n"
+          }
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Add Test Report to Release
@@ -28,7 +32,7 @@ jobs:
           Downlaod binary according to your needs or use Container image from GitHub packages
 
           ## Changelog
-          ${{ steps.build_changelog.outputs.changelog }}
+          ${{ steps.builder.outputs.changelog }}
   build-image:
     name: Build Image
     runs-on: ubuntu-latest
