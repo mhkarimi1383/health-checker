@@ -30,7 +30,10 @@ type CheckConfig struct {
 	Enabled *bool          `mapstructure:"enabled"`
 }
 
-var defualtEnabled bool = true
+var (
+	defualtEnabled bool = true
+	resultLock     sync.Mutex
+)
 
 type (
 	CheckConfigs map[string]CheckConfig
@@ -43,7 +46,7 @@ type Checker interface {
 	SetConfig(config CheckConfig) error
 	// Gets configuration
 	GetConfig() (config CheckConfig)
-	// Checks if checker is enabled or not and changes enable value optionaly
+	// Checks if checker is enabled or not and changes enable value optionally
 	Enable(...bool) bool
 	// Do the actual check
 	Check() Status
@@ -99,7 +102,10 @@ func RunChecks(chs Checkers) Statuses {
 			wg.Add(1)
 			go func(name string, ch Checker) {
 				defer wg.Done()
-				s[name] = ch.Check()
+				result := ch.Check()
+				resultLock.Lock()
+				defer resultLock.Unlock()
+				s[name] = result
 			}(name, ch)
 		}
 	}
